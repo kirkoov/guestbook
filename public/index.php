@@ -10,7 +10,17 @@ $database = new Medoo([
   'database_file' => '../storage/database.db'
 ]);
 
-// dump($database);
+$comment = new KK\Comment($database);
+
+$comment->setEmail('mm@test.em')
+  ->setName('K K')
+  ->setComment('It works?!')
+  ->setComment('Hm! Saving comments works!')
+  ->save();
+
+dump($database->error());
+
+
 ?>
 
 <!doctype html>

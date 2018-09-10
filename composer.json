@@ -9,6 +9,13 @@
             "email": "k.koovshinov@gmail.com"
         }
     ],
+
+    "autoload": {
+        "psr-4": {
+        "KK\\": "src"
+        }
+    },
+    
     "require": {
         "catfan/medoo": "^1.5"
     },
