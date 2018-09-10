@@ -1,0 +1,18 @@
+{
+    "name": "kk/guestbook",
+    "description": "a guestbook test app",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kir Koov",
+            "email": "k.koovshinov@gmail.com"
+        }
+    ],
+    "require": {
+        "catfan/medoo": "^1.5"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.1"
+    }
+}
