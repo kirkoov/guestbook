@@ -4,10 +4,15 @@ require_once '../vendor/autoload.php';
 // Using Medoo namespace
 use Medoo\Medoo;
 
-// Initialize
+// Initialize DB
+$file = '../storage/database.db';
+if (is_writable('../storage/database.local.db')) {
+  $file = '../storage/database.local.db';
+}
+
 $database = new Medoo([
   'database_type' => 'sqlite',
-  'database_file' => '../storage/database.db'
+  'database_file' => $file
 ]);
 
 $comment = new KK\Comment($database);
