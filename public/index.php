@@ -4,7 +4,7 @@ require_once '../vendor/autoload.php';
 // Using Medoo namespace
 use Medoo\Medoo;
 
-// Initialize DB
+// Initialize DB for dev keeping production db safe, see in .gitignore
 $file = '../storage/database.db';
 if (is_writable('../storage/database.local.db')) {
   $file = '../storage/database.local.db';
