@@ -87,15 +87,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <form method="post">
     <label>Name: <?php if($result != null && isset($result->getMessages()['name'])) echo "<span class='error'>" . implode(', ', $result->getMessages()['name']) . "</span>"; ?>
-    <input type="text" name="name" placeholder="Your name" value="<?php
+    <input type="text" name="name" placeholder="Your name" required value="<?php
       if(isset($_POST['name'])) echo $_POST['name']; ?>"></label>
 
     <label>Email: <?php if($result != null && isset($result->getMessages()['email'])) echo "<span class='error'>" . implode(', ', $result->getMessages()['email']) . "</span>"; ?>
-    <input type="email" name="email" placeholder="your@email.com" value="<?php
+    <input type="email" name="email" placeholder="your@email.com" required value="<?php
       if(isset($_POST['email'])) echo $_POST['email']; ?>"></label>
 
     <label>Comment: <?php if($result != null && isset($result->getMessages()['comment'])) echo "<span class='error'>" . implode(', ', $result->getMessages()['comment']) . "</span>"; ?>
-    <textarea name="comment" cols="30" rows="10"><?php
+    <textarea name="comment" cols="30" rows="10" required><?php
       if(isset($_POST['comment'])) echo $_POST['comment']; ?></textarea></label>
     <input type="submit" value="Send">
   </form>
