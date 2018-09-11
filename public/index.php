@@ -3,37 +3,14 @@ session_start();
 use Particle\Validator\Validator;
 
 require_once '../vendor/autoload.php';
-
-// Using Medoo namespace
-use Medoo\Medoo;
-
-// Initialize DB for dev keeping production db safe, see in .gitignore
-$file = '../storage/database.db';
-if (is_writable('../storage/database.local.db')) {
-  $file = '../storage/database.local.db';
-}
-
-$database = new Medoo([
-  'database_type' => 'sqlite',
-  'database_file' => $file
-]);
-
-$comment = new KK\Comment($database);
-
-
-
-echo session_id();
-// o923ol0grquq4dfakknncge8mr
-// o923ol0grquq4dfakknncge8mr
-// alooa27e7p9b56rcuap24imsm8
-
+require '../ini.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $v = new Validator();
 
   /*all three fields required with required(), we set a limit on their length with lengthBetween, we forced the name to be alpha- numeric (so no miscellaneous characters, like punctuation ― but spaces are allowed, indicated by the true we passed in) and we forced the email to be verified as an email format. Just for testing, we dump the errors we get if something goes wrong, or output "Submission is good" if all fields are OK*/
 
-  $v->required('name')->lengthBetween(1, 100)->alnum(true);
+  $v->required('name')->lengthBetween(1, 48)->alnum(true);
   $v->required('email')->email()->lengthBetween(5, 255);
   $v->required('comment')->lengthBetween(3, null);
   $result = $v->validate($_POST);
@@ -44,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               ->setEmail($_POST['email'])
               ->setComment($_POST['comment'])
               ->save();
+      $_SESSION['emAIl'] = $_POST['email'];
       header('Location: /');
       return;
       /*The header function can only work if it comes before any HTML output. Thus, we've put all our PHP code at the top of the file. If we now enter valid information into the form and press submit, we'll be sent back to http://guestbook.test, the comment will appear in the database, and the page will be refreshable without the warning.*/
@@ -84,31 +62,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <!-- Add your site or application content here -->
 
+  <h1>Welcome to KK's guestbook!</h1>
+  <h4>This small app demoes some simple <a href="https://medoo.in/">Medoo</a> sqlite functionality (insertion, deletion of comments) and <a href="http://validator.particle-php.com/en/latest/"> Particle\Validator</a> of user input.<br/>Want to leave your comment too? You're most welcome. Anyway, you'll be able to delete it as per email as long as the PHP session lasts.<br/>Should you miss the moment, simply add a new comment with the same email you used before, and you'll be good to go.</h4>
+
+
   <!-- begin list them previous comments if any -->
-  <?php $cs = $comment->findAll();
+  <?php
+  $cs = $comment->findAll();
   if(count($cs)) : 
   foreach ($comment->findAll() as $comment) : ?>
   <div class="comment">
-    <h3>On <?=$comment->getSubmissionDate()?>, <?=$comment->getName()?> wrote:</h3>
+    <?php if(isset($_SESSION['emAIl']) && $comment->getEmail() === $_SESSION['emAIl']) : ?>
+    <span class="delcom" title="Delete comment"><a href="delcom.php?id=<?=$comment->getId()?>">x</a></span>
+    <?php endif ?>
+    <h3>On <?=$comment->getSubmissionDate()?>, <?=$comment->getName()?> (MSK) wrote:</h3>
     <p><?=$comment->getComment();?></p>
   </div>
   <?php endforeach; ?>
   <?php else : ?>
     <h3>No comments yet</h3>
-    <p></p>
+    <p>Care to leave yours?</p>
   <?php endif; ?>
   <!-- end list them previous comments if any -->
 
   <form method="post">
-    <label>Name: <?php if($result != null && isset($result->getMessages()['name'])) echo "<span class='error'>" . implode('', $result->getMessages()['name']) . "</span>"; ?>
+    <label>Name: <?php if($result != null && isset($result->getMessages()['name'])) echo "<span class='error'>" . implode(', ', $result->getMessages()['name']) . "</span>"; ?>
     <input type="text" name="name" placeholder="Your name" value="<?php
       if(isset($_POST['name'])) echo $_POST['name']; ?>"></label>
 
-    <label>Email: <?php if($result != null && isset($result->getMessages()['email'])) echo "<span class='error'>" . implode('', $result->getMessages()['email']) . "</span>"; ?>
+    <label>Email: <?php if($result != null && isset($result->getMessages()['email'])) echo "<span class='error'>" . implode(', ', $result->getMessages()['email']) . "</span>"; ?>
     <input type="email" name="email" placeholder="your@email.com" value="<?php
       if(isset($_POST['email'])) echo $_POST['email']; ?>"></label>
 
-    <label>Comment: <?php if($result != null && isset($result->getMessages()['comment'])) echo "<span class='error'>" . implode('', $result->getMessages()['comment']) . "</span>"; ?>
+    <label>Comment: <?php if($result != null && isset($result->getMessages()['comment'])) echo "<span class='error'>" . implode(', ', $result->getMessages()['comment']) . "</span>"; ?>
     <textarea name="comment" cols="30" rows="10"><?php
       if(isset($_POST['comment'])) echo $_POST['comment']; ?></textarea></label>
     <input type="submit" value="Send">

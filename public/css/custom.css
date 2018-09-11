@@ -1,8 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Comfortaa');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
 
 body {
     padding: 10px;
     font-family: 'Comfortaa', serif, cursive;
+}
+
+h4 {
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: #839192;
 }
 
 form {
@@ -64,4 +70,20 @@ label > * {
 .error {
     display: inline;
     color: red;
+}
+
+.delcom {
+    float: right;
+    padding: 3px 5px 0 0;
+}
+
+.delcom > a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.delcom:hover {
+    padding: 0 5px 0 0;
+    font-size: larger;
+    cursor: pointer;
 }

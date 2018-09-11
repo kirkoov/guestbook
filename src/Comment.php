@@ -3,16 +3,18 @@
 namespace KK;
 
 class Comment {
-	protected $database, $name, $email, $comment, $submissionDate;
+	protected $database, $name, $id, $email, $comment, $submissionDate;
 	
 	function __construct(\Medoo\Medoo $medoo) {
 		$this->database = $medoo;
 	}
 
-	public function findAll(){
+	public function findAll() {
 		$collection = [];
 		$comments = $this->database->select('comments', '*', ["ORDER" => ["comments.submissionDate" => "DESC"]]);
 		// ["ORDER" => "comments.submissionDate DESC"] doesn't seem to work
+
+		// var_dump($comments);
 
 		if ($comments) {
 			foreach ($comments as $array) {
@@ -20,6 +22,7 @@ class Comment {
 				$collection[] = $comment
 				->setComment($array['comment'])
 				->setEmail($array['email'])
+				->setId($array['id'])
 				->setName($array['name'])
 				->setSubmissionDate($array['submissionDate']);
 			}
@@ -27,8 +30,18 @@ class Comment {
 		return $collection;
 	}
 
+	public function delCom($id, $em) {
+		$del = $this->database->delete('comments', ['id' => $id, 'email' => $em]);
+		return $this;
+	}
+
 	public function setName($name) {
         $this->name = (string)$name;
+        return $this;
+    }
+
+    public function setId($id) {
+        $this->id = (int)$id;
         return $this;
     }
 
@@ -58,6 +71,9 @@ class Comment {
     public function getName() {
         return $this->name;
     }
+    public function getId() {
+        return $this->id;
+    }
     public function getEmail() {
         return $this->email;
     }
@@ -72,9 +88,9 @@ class Comment {
 	  if ($this->getName() && $this->getEmail() && $this->getComment()) {
 		$this->setSubmissionDate(date('Y-m-d H:i:s'));
 		return $this->database->insert('comments', [
-		  'name' => $this->getName(),
-		  'email' => $this->getEmail(),
-		  'comment' => $this->getComment(),
+		  'name' => trim($this->getName()),
+		  'email' => trim($this->getEmail()),
+		  'comment' => trim($this->getComment()),
 		  'submissionDate' => $this->getSubmissionDate()
 		]);
  	  }
