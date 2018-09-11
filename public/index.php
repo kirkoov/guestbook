@@ -1,4 +1,5 @@
 <?php
+session_start();
 use Particle\Validator\Validator;
 
 require_once '../vendor/autoload.php';
@@ -18,6 +19,14 @@ $database = new Medoo([
 ]);
 
 $comment = new KK\Comment($database);
+
+
+
+echo session_id();
+// o923ol0grquq4dfakknncge8mr
+// o923ol0grquq4dfakknncge8mr
+// alooa27e7p9b56rcuap24imsm8
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $v = new Validator();
@@ -42,10 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       die($e->getMessage()); 
     }
   } else {
-      dump($result->getMessages());
+      // dump($result->getMessages());
+      // dump($result->getMessages());
   }
   // dump($database->error());
-}
+} else $result = null;
 ?>
 
 <!doctype html>
@@ -87,13 +97,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h3>No comments yet</h3>
     <p></p>
   <?php endif; ?>
-
   <!-- end list them previous comments if any -->
 
   <form method="post">
-    <label>Name: <input type="text" name="name" placeholder="Your name" required></label>
-    <label>Email: <input type="email" name="email" placeholder="your@email.com" required></label>
-    <label>Comment: <textarea name="comment" cols="30" rows="10" required></textarea></label>
+    <label>Name: <?php if($result != null && isset($result->getMessages()['name'])) echo "<span class='error'>" . implode('', $result->getMessages()['name']) . "</span>"; ?>
+    <input type="text" name="name" placeholder="Your name" value="<?php
+      if(isset($_POST['name'])) echo $_POST['name']; ?>"></label>
+
+    <label>Email: <?php if($result != null && isset($result->getMessages()['email'])) echo "<span class='error'>" . implode('', $result->getMessages()['email']) . "</span>"; ?>
+    <input type="email" name="email" placeholder="your@email.com" value="<?php
+      if(isset($_POST['email'])) echo $_POST['email']; ?>"></label>
+
+    <label>Comment: <?php if($result != null && isset($result->getMessages()['comment'])) echo "<span class='error'>" . implode('', $result->getMessages()['comment']) . "</span>"; ?>
+    <textarea name="comment" cols="30" rows="10"><?php
+      if(isset($_POST['comment'])) echo $_POST['comment']; ?></textarea></label>
     <input type="submit" value="Send">
   </form>
   
@@ -104,11 +121,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script src="js/main.js"></script>
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-  <script>
+  <!-- <script>
     window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
     ga('create', 'UA-GSTBK-K', 'auto'); ga('send', 'pageview')
   </script>
-  <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+  <script src="https://www.google-analytics.com/analytics.js" async defer></script> -->
 </body>
 
 </html>
