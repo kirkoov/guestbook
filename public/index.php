@@ -1,4 +1,6 @@
 <?php
+use Particle\Validator\Validator;
+
 require_once '../vendor/autoload.php';
 
 // Using Medoo namespace
@@ -17,15 +19,33 @@ $database = new Medoo([
 
 $comment = new KK\Comment($database);
 
-$comment->setEmail('mm@test.em')
-  ->setName('K K')
-  ->setComment('It works?!')
-  ->setComment('Hm! Saving comments works!')
-  ->save();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $v = new Validator();
 
-dump($database->error());
+  /*all three fields required with required(), we set a limit on their length with lengthBetween, we forced the name to be alpha- numeric (so no miscellaneous characters, like punctuation ― but spaces are allowed, indicated by the true we passed in) and we forced the email to be verified as an email format. Just for testing, we dump the errors we get if something goes wrong, or output "Submission is good" if all fields are OK*/
 
-
+  $v->required('name')->lengthBetween(1, 100)->alnum(true);
+  $v->required('email')->email()->lengthBetween(5, 255);
+  $v->required('comment')->lengthBetween(3, null);
+  $result = $v->validate($_POST);
+  if ($result->isValid()) {
+    // echo "Submission is good!";
+    try {
+      $comment->setName($_POST['name'])
+              ->setEmail($_POST['email'])
+              ->setComment($_POST['comment'])
+              ->save();
+      header('Location: /');
+      return;
+      /*The header function can only work if it comes before any HTML output. Thus, we've put all our PHP code at the top of the file. If we now enter valid information into the form and press submit, we'll be sent back to http://guestbook.test, the comment will appear in the database, and the page will be refreshable without the warning.*/
+    } catch(\Exception $e) {
+      die($e->getMessage()); 
+    }
+  } else {
+      dump($result->getMessages());
+  }
+  // dump($database->error());
+}
 ?>
 
 <!doctype html>
@@ -44,6 +64,7 @@ dump($database->error());
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/custom.css">
 </head>
 
 <body>
@@ -52,11 +73,28 @@ dump($database->error());
   <![endif]-->
 
   <!-- Add your site or application content here -->
+
+  <!-- begin list them previous comments if any -->
+  <?php $cs = $comment->findAll();
+  if(count($cs)) : 
+  foreach ($comment->findAll() as $comment) : ?>
+  <div class="comment">
+    <h3>On <?=$comment->getSubmissionDate()?>, <?=$comment->getName()?> wrote:</h3>
+    <p><?=$comment->getComment();?></p>
+  </div>
+  <?php endforeach; ?>
+  <?php else : ?>
+    <h3>No comments yet</h3>
+    <p></p>
+  <?php endif; ?>
+
+  <!-- end list them previous comments if any -->
+
   <form method="post">
-    <label>Name: <input type="text" name="name" placeholder="Your name"></label>
-    <label>Email: <input type="email" name="email" placeholder="your@email.com"></label>
-    <label>Comment: <textarea name="comment" cols="30" rows="10"></textarea></label>
-    <input type="submit" value="Save">
+    <label>Name: <input type="text" name="name" placeholder="Your name" required></label>
+    <label>Email: <input type="email" name="email" placeholder="your@email.com" required></label>
+    <label>Comment: <textarea name="comment" cols="30" rows="10" required></textarea></label>
+    <input type="submit" value="Send">
   </form>
   
   <script src="js/vendor/modernizr-3.6.0.min.js"></script>
