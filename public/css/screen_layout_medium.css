@@ -1,0 +1,15 @@
+#intro {
+	width: 99%;
+}
+
+form {
+	width: 98%;
+}
+
+form > input {
+    width: 30%;
+}
+
+.comment {
+    width: 99%;
+}

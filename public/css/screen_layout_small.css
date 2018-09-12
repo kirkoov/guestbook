@@ -1,0 +1,23 @@
+h1 {
+	font-size: 1.5em;
+}
+
+h3, h4 {
+    font-size: larger;
+}
+
+#intro {
+	width: 99%;
+}
+
+form {
+	width: 98%;
+}
+
+form > input {
+    width: 98%;
+}
+
+.comment {
+    width: 99%;
+}

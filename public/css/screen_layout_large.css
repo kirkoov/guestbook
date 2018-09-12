@@ -1,0 +1,15 @@
+#intro {
+	width: 600px;
+}
+
+form {
+	width: 589px;
+}
+
+form > input {
+    width: 10%;
+}
+
+.comment {
+    width: 600px;
+}

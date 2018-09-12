@@ -37,22 +37,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!doctype html>
-<html class="no-js" lang="">
+<html class="no-js" lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>A test guestbook app</title>
+  <title>KK's guestbook</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="manifest" href="site.webmanifest">
   <link rel="apple-touch-icon" href="icon.png">
   <!-- Place favicon.ico in the root directory -->
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/custom.css">
+
+  <link rel="stylesheet" type="text/css" href="css/screen_layout_large.css"/>
+  <link rel="stylesheet" type="text/css" media="only screen and (min-width:50px) and (max-width:500px)"
+          href="css/screen_layout_small.css"/>
+  <link rel="stylesheet" type="text/css" media="only screen and (min-width:501px) and (max-width:800px)"
+          href="css/screen_layout_medium.css"/>
 </head>
 
 <body>
@@ -63,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <!-- Add your site or application content here -->
 
   <h1>Welcome to KK's guestbook!</h1>
-  <h4>This small app demoes some simple <a href="https://medoo.in/">Medoo</a> sqlite functionality (insertion, deletion of comments) and <a href="http://validator.particle-php.com/en/latest/"> Particle\Validator</a> of user input.<br/>Want to leave your comment too? You're most welcome. Anyway, you'll be able to delete it as per email as long as the PHP session lasts.<br/>Should you miss the moment, simply add a new comment with the same email you used before, and you'll be good to go.</h4>
+  <div id="intro"><h4>This small app demoes simple <a href="https://medoo.in/">Medoo</a> sqlite functionality such as insertion and deletion of comments, and <a href="http://validator.particle-php.com/en/latest/"> Particle\Validator</a> of user input. You're most welcome to leave your comment too. Unlike in the standard guestbook, you'll be able to delete your comment(s) as per your email while the PHP session is on. If you outlast the session, simply add a new comment with the same email you used before, and you'll be good to go. <?php if(isset($_SESSION['emAIl'])) echo "<a href='logout.php'>Close session</a>."; ?></h4></div>
 
 
   <!-- begin list them previous comments if any -->
