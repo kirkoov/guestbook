@@ -69,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <!-- Add your site or application content here -->
 
   <h1>Welcome to KK's guestbook!</h1>
-  <div id="intro"><h4>This small app demoes simple responsiveness, <a href="https://medoo.in/">Medoo</a> sqlite functionality such as insertion and deletion of comments, and <a href="http://validator.particle-php.com/en/latest/"> Particle\Validator</a> of user input. You're most welcome to leave your comment too. Unlike in the standard guestbook, you'll be able to delete your comment(s) as per your email while the PHP session is on. If you outlast the session, simply add a new comment with the same email you used before, and you'll be good to go. <?php if(isset($_SESSION['emAIl'])) echo "<a href='logout.php'>Close session</a>."; ?></h4></div>
+  <div id="info">INFO</div>
+  <div id="intro"><h4>This small app demoes <a href="https://medoo.in/">Medoo</a> sqlite functionality such as insertion and deletion of comments, <a href="http://validator.particle-php.com/en/latest/"> Particle\Validator</a> of user input and simple responsiveness with a trivial check for JS enabled. You're most welcome to leave your comment too. Unlike in the standard guestbook, you'll be able to delete your comment(s) as per your email while the PHP session is on. If you outlast the session, simply add a new comment with the same email you used before, and you'll be good to go. <?php if(isset($_SESSION['emAIl'])) echo "<a href='logout.php'>Close session</a>."; ?></h4></div>
 
 
   <!-- begin list them previous comments if any -->
