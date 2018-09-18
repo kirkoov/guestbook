@@ -6,7 +6,7 @@ body {
     font-family: 'Comfortaa', serif, cursive;
 }
 
-h3, h4, label, #info {
+h3, label, #intro {
     font-family: 'Open Sans Condensed', sans-serif;
     color: #839192;
 }
