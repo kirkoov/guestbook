@@ -85,3 +85,23 @@ label > * {
     font-size: larger;
     cursor: pointer;
 }
+
+.no-js { 
+/* This CSS code will only show up if JS is disabled. */ 
+    background-color: lightgray;
+}
+
+#noscript-warning {
+    font-family: sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1050;
+    text-align: center;
+    /*font-weight: bold;
+    font-size: 120%;*/
+    color: #FFF;
+    background-color: #AE0000;
+    padding: 5px 0;
+}
