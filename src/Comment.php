@@ -90,7 +90,7 @@ class Comment {
 		return $this->database->insert('comments', [
 		  'name' => trim($this->getName()),
 		  'email' => trim($this->getEmail()),
-		  'comment' => trim($this->getComment()),
+		  'comment' => htmlspecialchars(trim($this->getComment()), ENT_QUOTES, 'UTF-8'),
 		  'submissionDate' => $this->getSubmissionDate()
 		]);
  	  }
